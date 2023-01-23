@@ -1,0 +1,6 @@
+/Log
+/config
+*.tmp
+*.bin
+tmp/
+bin/

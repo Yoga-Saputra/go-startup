@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      # Correct the path to your Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    # Important to bind/mount your codebase dir to /app dir for live reload
+    volumes:
+      - ./:/app
+    depends_on:
+      - db-mysql
+  db-mysql:
+    container_name: mysql_db
+    platform: linux/x86_64
+    image: mysql:5.7
+    ports: 
+      - 3306:3306
+    environment: 
+      - MYSQL_DATABASE=golang_startup
+      - MYSQL_ROOT_PASSWORD=P@ssW0rd
+    volumes:
+      - mysql_db:/var/lib/mysql
+      
+volumes:
+  mysql_db:
