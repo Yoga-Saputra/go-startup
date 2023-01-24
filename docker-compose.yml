@@ -13,6 +13,7 @@ services:
       - ./:/app
     depends_on:
       - db_mysql_startup
+      
   db_mysql_startup:
     container_name: mysql_db_startup
     platform: linux/x86_64
