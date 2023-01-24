@@ -1,8 +1,8 @@
 package helper
 
 import (
+	"bwastartup/app/users"
 	"bwastartup/config"
-	"bwastartup/users"
 	"encoding/json"
 	"fmt"
 	"net/http"

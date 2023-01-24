@@ -1,9 +1,9 @@
 package routes
 
 import (
+	"bwastartup/app/handler"
+	"bwastartup/app/users"
 	"bwastartup/config"
-	"bwastartup/handler"
-	"bwastartup/users"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
