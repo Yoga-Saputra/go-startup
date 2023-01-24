@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bwastartup/app/auth"
 	"bwastartup/app/helper"
 	"bwastartup/app/users"
 	"bwastartup/config"
@@ -17,7 +18,6 @@ import (
 func Version(c *gin.Context) {
 	now := time.Now()
 	nowFormat := now.Format("2006-01-02 15:04:05")
-
 	map1 := map[string]string{
 		"last_update": nowFormat,
 		"build_with":  "GO",
@@ -28,6 +28,8 @@ func Version(c *gin.Context) {
 	jsonContent := helper.MapToJson(map1)
 	config.Loggers("info", string(jsonContent))
 
+	fmt.Println()
+
 	c.JSON(http.StatusOK, map1)
 }
 
@@ -35,13 +37,14 @@ func Version(c *gin.Context) {
 
 type userHandler struct {
 	userService users.Service
+	authService auth.Service
+}
+
+func NewUserHandler(userService users.Service, authService auth.Service) *userHandler {
+	return &userHandler{userService, authService}
 }
 
 // <========== start register ==============>
-// tangkap input dari user
-// map input dari user ke struct RegisterUserInput
-// struct di atas kita passing sebagai parameter service
-
 func (h *userHandler) RegisterUser(c *gin.Context) {
 	var input users.RegisterUserInput
 	err := c.ShouldBindJSON(&input)
@@ -58,26 +61,18 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 		return
 	}
 
-	formatter := helper.FormatUser(user, "Tokentokentoken")
+	token := responseToken(user.ID, h, c, "register account failed")
+
+	formatter := helper.FormatUser(user, token)
 	response := helper.ApiResponse("account has been registered", http.StatusOK, "success", formatter)
 	config.Loggers("info", response)
 
 	c.JSON(http.StatusOK, response)
 }
 
-func NewUserHandler(userService users.Service) *userHandler {
-	return &userHandler{userService}
-}
-
 // <========== end register ==============>
 
 // <========== start login ==============>
-// user memasukan input(email dan password)
-// input ditangkap handler
-// mapping dari input user ke input struct
-// input struct passing service
-// di service mencari dengan bantuan repository user dengan email dan mencocokan password
-
 func (h *userHandler) Login(c *gin.Context) {
 	var input users.LoginInput
 
@@ -94,8 +89,10 @@ func (h *userHandler) Login(c *gin.Context) {
 		return
 	}
 
-	formatter := helper.FormatUser(loggedinUser, "tokenasdad")
+	token := responseToken(loggedinUser.ID, h, c, "login failed")
+	formatter := helper.FormatUser(loggedinUser, token)
 	response := helper.ApiResponse("successfully loggedin", http.StatusOK, "success", formatter)
+	config.Loggers("info", response)
 	c.JSON(http.StatusOK, response)
 }
 
@@ -144,8 +141,9 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 	_, err = h.userService.SaveAvatar(userId, path)
 	responseErrorUploadAvatar(err, c)
 	responseSuccessUploadAvatar(c)
-
 }
+
+// <========== end upload avatar ==============>
 
 func responseErrorUploadAvatar(err error, c *gin.Context) {
 	if err != nil {
@@ -165,4 +163,11 @@ func responseSuccessUploadAvatar(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// <========== end upload avatar ==============>
+func responseToken(id int, h *userHandler, c *gin.Context, msg string) string {
+	token, err := h.authService.GenerateToken(id)
+	if err != nil {
+		helper.ErrorValidation(err, c, msg, "error", http.StatusBadRequest, err)
+		return err.Error()
+	}
+	return token
+}
