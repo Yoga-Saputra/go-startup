@@ -4,6 +4,7 @@ import (
 	"bwastartup/config"
 	"bwastartup/helper"
 	"bwastartup/users"
+	"fmt"
 	"net/http"
 	"runtime"
 	"time"
@@ -117,9 +118,7 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 		return
 	}
 
-	data := gin.H{
-		"is_available": isEmailAvailable,
-	}
+	data := gin.H{"is_available": isEmailAvailable}
 
 	var metaMsg string
 	metaMsg = "email has been registerd"
@@ -131,3 +130,39 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 }
 
 // <========== end check email availability ==============>
+
+// <========== start upload avatar ==============>
+func (h *userHandler) UploadAvatar(c *gin.Context) {
+	file, err := c.FormFile("avatar")
+	responseErrorUploadAvatar(err, c)
+	userId := 10
+	// sprintf = menggabungkan string
+	path := fmt.Sprintf("storage/images/users/%d-%s", userId, file.Filename)
+	err = c.SaveUploadedFile(file, path)
+	responseErrorUploadAvatar(err, c)
+
+	_, err = h.userService.SaveAvatar(userId, path)
+	responseErrorUploadAvatar(err, c)
+	responseSuccessUploadAvatar(c)
+
+}
+
+func responseErrorUploadAvatar(err error, c *gin.Context) {
+	if err != nil {
+		errorMsg := gin.H{"is_uploaded": false}
+		jsonContent := helper.InterfaceToJson(errorMsg)
+		response := helper.ApiResponse("failed to upload avatar", http.StatusBadRequest, "error", errorMsg)
+		c.JSON(http.StatusBadRequest, response)
+		config.Loggers("error", string(jsonContent))
+		return
+	}
+}
+
+func responseSuccessUploadAvatar(c *gin.Context) {
+	successMsg := gin.H{"is_uploaded": true}
+	response := helper.ApiResponse("avatar successfully uploaded", http.StatusOK, "success", successMsg)
+	config.Loggers("info", response)
+	c.JSON(http.StatusOK, response)
+}
+
+// <========== end upload avatar ==============>

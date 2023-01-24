@@ -1,6 +1,11 @@
 package helper
 
-import "crypto/md5"
+import (
+	"crypto/md5"
+	"os"
+
+	"github.com/joho/godotenv"
+)
 
 type (
 	response struct {
@@ -32,9 +37,9 @@ func ApiResponse(message string, code int, status string, data interface{}) resp
 
 func GetSign(types string, player string) [16]byte {
 
-	YGG_KEY := "gY7ychHF3AjAKc2u4Fy"
-	YGG_TOP_ORG := "gY7ychHF3AjAKc2u4Fy"
-	YGG_ORG := "gY7ychHF3AjAKc2u4Fy"
+	YGG_KEY := GetInv("YGG_KEY")
+	YGG_TOP_ORG := GetInv("YGG_TOP_ORG")
+	YGG_ORG := GetInv("YGG_ORG")
 
 	signPlayer := player + "" + YGG_KEY
 	signMerchant := player + "" + YGG_TOP_ORG + "" + YGG_ORG + "" + YGG_KEY
@@ -48,4 +53,14 @@ func GetSign(types string, player string) [16]byte {
 	}
 
 	return typ
+}
+
+func GetInv(key string) string {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		panic(err)
+	}
+
+	return os.Getenv(key)
 }

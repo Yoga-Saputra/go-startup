@@ -27,6 +27,7 @@ func InitApi(state overseer.State) {
 	api.POST("/users", userhandler.RegisterUser)
 	api.POST("/session", userhandler.Login)
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
+	api.POST("/avatars", userhandler.UploadAvatar)
 
 	// end register and login routes
 

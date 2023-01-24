@@ -1,6 +1,8 @@
-/Log
+/storage
+/storage/*
 /config
 *.tmp
 *.bin
 tmp/
 bin/
+.env
