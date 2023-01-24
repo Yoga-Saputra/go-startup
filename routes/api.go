@@ -23,9 +23,10 @@ func InitApi(state overseer.State) {
 
 	// start register and login routes
 
-	api := router.Group("/api/v1/users")
-	api.POST("/register", userhandler.RegisterUser)
-	api.POST("/login", userhandler.Login)
+	api := router.Group("/api/v1")
+	api.POST("/users", userhandler.RegisterUser)
+	api.POST("/session", userhandler.Login)
+	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
 
 	// end register and login routes
 
