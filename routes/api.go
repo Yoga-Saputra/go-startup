@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"bwastartup/app/auth"
 	"bwastartup/app/handler"
 	"bwastartup/app/users"
 	"bwastartup/config"
@@ -17,19 +18,16 @@ func InitApi(state overseer.State) {
 	db := config.ConnectionDB()
 	userRepository := users.NewRepository(db)
 	userService := users.NewService(userRepository)
-	userhandler := handler.NewUserHandler(userService)
+	apiService := auth.NewService()
+	userhandler := handler.NewUserHandler(userService, apiService)
 
 	router.GET("/", handler.Version)
-
-	// start register and login routes
 
 	api := router.Group("/api/v1")
 	api.POST("/users", userhandler.RegisterUser)
 	api.POST("/session", userhandler.Login)
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
 	api.POST("/avatars", userhandler.UploadAvatar)
-
-	// end register and login routes
 
 	router.Run(":3000")
 
