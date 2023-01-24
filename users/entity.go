@@ -2,6 +2,7 @@ package users
 
 import "time"
 
+// entity is like model in laravel
 type User struct {
 	ID             int
 	Name           string
