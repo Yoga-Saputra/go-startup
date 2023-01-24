@@ -1,11 +1,13 @@
 package helper
 
 import (
+	"bwastartup/config"
 	"bwastartup/users"
-	"crypto/md5"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -28,36 +30,35 @@ func FormatUser(user users.User, token string) UserFormatter {
 	return formatter
 }
 
-func FormatValidationError(err error) []string {
+func FormatValidationError(err error) interface{} {
 	var errors []string
 	for _, e := range err.(validator.ValidationErrors) {
 		errors = append(errors, e.Error())
 	}
-	return errors
+	errorMessage := gin.H{"errors": errors}
+	return errorMessage
 }
 
-func GetSign(types string, player string) [16]byte {
+func ErrorValidation(err error, c *gin.Context, msg string, status string, code int, errMsg interface{}) {
+	jsonConvert := InterfaceToJson(errMsg)
+	log := ApiResponse(msg, http.StatusUnprocessableEntity, status, string(jsonConvert))
+	config.Loggers("error", log)
 
-	YGG_KEY := "gY7ychHF3AjAKc2u4Fy"
-	YGG_TOP_ORG := "gY7ychHF3AjAKc2u4Fy"
-	YGG_ORG := "gY7ychHF3AjAKc2u4Fy"
-
-	signPlayer := player + "" + YGG_KEY
-	signMerchant := player + "" + YGG_TOP_ORG + "" + YGG_ORG + "" + YGG_KEY
-
-	hashPlayer := md5.Sum([]byte(signPlayer))
-	hashMerchant := md5.Sum([]byte(signMerchant))
-
-	typ := hashMerchant
-	if types == "player" {
-		typ = hashPlayer
-	}
-
-	return typ
+	response := ApiResponse(msg, http.StatusUnprocessableEntity, status, errMsg)
+	c.JSON(code, response)
 }
 
 // Convert Map to JSON
 func MapToJson(params map[string]string) []byte {
+	jsonContent, err := json.Marshal(params)
+	if err != nil {
+		fmt.Println(err)
+		return jsonContent
+	}
+	return jsonContent
+}
+
+func InterfaceToJson(params interface{}) []byte {
 	jsonContent, err := json.Marshal(params)
 	if err != nil {
 		fmt.Println(err)

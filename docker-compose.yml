@@ -12,9 +12,9 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - db-mysql
-  db-mysql:
-    container_name: mysql_db
+      - db_mysql_startup
+  db_mysql_startup:
+    container_name: mysql_db_startup
     platform: linux/x86_64
     image: mysql:5.7
     ports: 
@@ -23,7 +23,7 @@ services:
       - MYSQL_DATABASE=golang_startup
       - MYSQL_ROOT_PASSWORD=P@ssW0rd
     volumes:
-      - mysql_db:/var/lib/mysql
+      - mysql_db_startup:/var/lib/mysql
       
 volumes:
-  mysql_db:
+  mysql_db_startup:
