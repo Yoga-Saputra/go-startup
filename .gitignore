@@ -1,4 +1,5 @@
-/Log
+/storage
+/storage/*
 /config
 *.tmp
 *.bin
