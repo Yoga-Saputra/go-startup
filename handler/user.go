@@ -99,3 +99,35 @@ func (h *userHandler) Login(c *gin.Context) {
 }
 
 // <========== end login ==============>
+
+// <========== start check email availability ==============>
+func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
+	var input users.CheckEmailInput
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusUnprocessableEntity, errors)
+		return
+	}
+
+	isEmailAvailable, err := h.userService.IsEmailAvailable(input)
+	if err != nil {
+		errorMsg := gin.H{"error": "server error"}
+		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusBadRequest, errorMsg)
+		return
+	}
+
+	data := gin.H{
+		"is_available": isEmailAvailable,
+	}
+
+	var metaMsg string
+	metaMsg = "email has been registerd"
+	if isEmailAvailable {
+		metaMsg = "email is available"
+	}
+	response := helper.ApiResponse(metaMsg, http.StatusOK, "success", data)
+	c.JSON(http.StatusOK, response)
+}
+
+// <========== end check email availability ==============>
