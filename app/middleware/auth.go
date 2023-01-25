@@ -15,8 +15,7 @@ func AuthMiddleware(authService auth.Service, userService users.Service) gin.Han
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if !strings.Contains(authHeader, "Bearer") {
-			response := helper.ApiResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			responseFailedMiddleware(c)
 			return
 		}
 
@@ -52,6 +51,6 @@ func AuthMiddleware(authService auth.Service, userService users.Service) gin.Han
 }
 
 func responseFailedMiddleware(c *gin.Context) {
-	response := helper.ApiResponse("Unauthorized 1", http.StatusUnauthorized, "error", nil)
+	response := helper.ApiResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
 	c.AbortWithStatusJSON(http.StatusUnauthorized, response)
 }
