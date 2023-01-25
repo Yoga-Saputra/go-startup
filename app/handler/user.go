@@ -132,7 +132,8 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 func (h *userHandler) UploadAvatar(c *gin.Context) {
 	file, err := c.FormFile("avatar")
 	responseErrorUploadAvatar(err, c)
-	userId := 10
+	currentUser := c.MustGet("current_user").(users.User)
+	userId := currentUser.ID
 	// sprintf = menggabungkan string
 	path := fmt.Sprintf("storage/images/users/%d-%s", userId, file.Filename)
 	err = c.SaveUploadedFile(file, path)
@@ -169,5 +170,12 @@ func responseToken(id int, h *userHandler, c *gin.Context, msg string) string {
 		helper.ErrorValidation(err, c, msg, "error", http.StatusBadRequest, err)
 		return err.Error()
 	}
+	mapToken := map[string]interface{}{
+		"user_id": id,
+		"token":   token,
+	}
+	// Convert the map interface to JSON
+	jsonToken := helper.InterfaceToJson(mapToken)
+	config.Loggers("info", string(jsonToken))
 	return token
 }
