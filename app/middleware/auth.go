@@ -28,27 +28,30 @@ func AuthMiddleware(authService auth.Service, userService users.Service) gin.Han
 		}
 
 		token, err := authService.ValidateToken(tokenString)
+
 		if err != nil {
-			response := helper.ApiResponse("Unauthorized 1", http.StatusUnauthorized, "error", nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			responseFailedMiddleware(c)
 			return
 		}
 
 		claim, ok := token.Claims.(jwt.MapClaims)
 		if !ok || !token.Valid {
-			response := helper.ApiResponse("Unauthorized 2", http.StatusUnauthorized, "error", nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			responseFailedMiddleware(c)
 			return
 		}
 
 		userId := int(claim["user_id"].(float64))
 		user, err := userService.GetUserByID(userId)
 		if err != nil {
-			response := helper.ApiResponse("Unauthorized 3", http.StatusUnauthorized, "error", nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			responseFailedMiddleware(c)
 			return
 		}
 
 		c.Set("current_user", user)
 	}
+}
+
+func responseFailedMiddleware(c *gin.Context) {
+	response := helper.ApiResponse("Unauthorized 1", http.StatusUnauthorized, "error", nil)
+	c.AbortWithStatusJSON(http.StatusUnauthorized, response)
 }
