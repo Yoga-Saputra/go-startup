@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 // <========== start version ==============>
@@ -46,12 +47,36 @@ func NewUserHandler(userService users.Service, authService auth.Service) *userHa
 
 // <========== start register ==============>
 func (h *userHandler) RegisterUser(c *gin.Context) {
+	var inputCheckEmail users.CheckEmailInput
+	err := c.ShouldBindBodyWith(&inputCheckEmail, binding.JSON)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusUnprocessableEntity, errors)
+		return
+	}
+
+	isEmailAvailable, err := h.userService.IsEmailAvailable(inputCheckEmail)
+	if err != nil {
+		errorMsg := gin.H{"error": "server error"}
+		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusBadRequest, errorMsg)
+		return
+	}
+
+	if !isEmailAvailable {
+		data := gin.H{"is_available": isEmailAvailable}
+		metaMsg := "email has been registerd"
+		response := helper.ApiResponse(metaMsg, http.StatusOK, "error", data)
+		c.JSON(http.StatusForbidden, response)
+		return
+	}
+
 	var input users.RegisterUserInput
-	err := c.ShouldBindJSON(&input)
+	err = c.ShouldBindBodyWith(&input, binding.JSON)
 	if err != nil {
 		errors := helper.FormatValidationError(err)
 		helper.ErrorValidation(err, c, "register account failed", "error", http.StatusUnprocessableEntity, errors)
-		return
+		// return
+		c.JSON(http.StatusOK, err)
 	}
 
 	user, err := h.userService.RegisterUser(input)
@@ -109,6 +134,7 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 	}
 
 	isEmailAvailable, err := h.userService.IsEmailAvailable(input)
+	config.Loggers("error", isEmailAvailable)
 	if err != nil {
 		errorMsg := gin.H{"error": "server error"}
 		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusBadRequest, errorMsg)
@@ -117,13 +143,17 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 
 	data := gin.H{"is_available": isEmailAvailable}
 
-	var metaMsg string
-	metaMsg = "email has been registerd"
+	metaMsg := "email has been registerd"
+	success := "error"
+	code := http.StatusForbidden
+
 	if isEmailAvailable {
+		code = http.StatusOK
+		success = "success"
 		metaMsg = "email is available"
 	}
-	response := helper.ApiResponse(metaMsg, http.StatusOK, "success", data)
-	c.JSON(http.StatusOK, response)
+	response := helper.ApiResponse(metaMsg, code, success, data)
+	c.JSON(code, response)
 }
 
 // <========== end check email availability ==============>
