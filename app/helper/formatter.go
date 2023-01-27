@@ -1,11 +1,11 @@
 package helper
 
 import (
-	"bwastartup/app/users"
-	"bwastartup/config"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"startup/app/users"
+	"startup/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

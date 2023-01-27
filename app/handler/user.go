@@ -1,13 +1,13 @@
 package handler
 
 import (
-	"bwastartup/app/auth"
-	"bwastartup/app/helper"
-	"bwastartup/app/users"
-	"bwastartup/config"
 	"fmt"
 	"net/http"
 	"runtime"
+	"startup/app/auth"
+	"startup/app/helper"
+	"startup/app/users"
+	"startup/config"
 	"time"
 
 	"github.com/gin-gonic/gin"
