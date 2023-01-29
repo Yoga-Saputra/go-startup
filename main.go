@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bwastartup/routes"
+	"startup/routes"
 	"time"
 
 	"github.com/jpillora/overseer"

@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"bwastartup/app/auth"
-	"bwastartup/app/helper"
-	"bwastartup/app/users"
 	"net/http"
+	"startup/app/auth"
+	"startup/app/helper"
+	"startup/app/users"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"

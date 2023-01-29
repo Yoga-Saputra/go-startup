@@ -1,12 +1,13 @@
 package routes
 
 import (
-	"bwastartup/app/auth"
-	"bwastartup/app/handler"
-	"bwastartup/app/middleware"
-	"bwastartup/app/users"
-	"bwastartup/config"
 	"net/http"
+	"startup/app/auth"
+	"startup/app/campaign"
+	"startup/app/handler"
+	"startup/app/middleware"
+	"startup/app/users"
+	"startup/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jpillora/overseer"
@@ -18,12 +19,17 @@ func InitApi(state overseer.State) {
 
 	db := config.ConnectionDB()
 	userRepository := users.NewRepository(db)
+	campaignRepository := campaign.NewRepository(db)
+
 	userService := users.NewService(userRepository)
+	campaignService := campaign.NewService(campaignRepository)
 	authService := auth.NewService()
 
 	userhandler := handler.NewUserHandler(userService, authService)
+	campaignhandler := handler.NewCampaignHandler(campaignService)
 
 	router.GET("/", handler.Version)
+	router.GET("/campaign", campaignhandler.FindAllCamp)
 
 	api := router.Group("/api/v1")
 	api.POST("/users", userhandler.RegisterUser)

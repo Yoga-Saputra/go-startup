@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"bwastartup/app/helper"
 	"errors"
+	"startup/app/helper"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -25,6 +25,7 @@ func (s *jwtService) GenerateToken(userId int) (string, error) {
 	claim := jwt.MapClaims{}
 	claim["user_id"] = userId
 
+	// generate token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	signedToken, err := token.SignedString(SECRET_KEY)
 	if err != nil {
@@ -35,6 +36,7 @@ func (s *jwtService) GenerateToken(userId int) (string, error) {
 }
 
 func (s *jwtService) ValidateToken(encodeToken string) (*jwt.Token, error) {
+
 	token, err := jwt.Parse(encodeToken, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
