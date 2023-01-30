@@ -29,13 +29,13 @@ func InitApi(state overseer.State) {
 	campaignhandler := handler.NewCampaignHandler(campaignService)
 
 	router.GET("/", handler.Version)
-	router.GET("/campaign", campaignhandler.FindAllCamp)
 
 	api := router.Group("/api/v1")
 	api.POST("/users", userhandler.RegisterUser)
 	api.POST("/session", userhandler.Login)
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
 	api.POST("/avatars", middleware.AuthMiddleware(authService, userService), userhandler.UploadAvatar)
+	api.GET("/campaigns", campaignhandler.FindAllCamp)
 
 	router.Run(":3000")
 
