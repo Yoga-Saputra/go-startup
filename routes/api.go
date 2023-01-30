@@ -28,6 +28,7 @@ func InitApi(state overseer.State) {
 	userhandler := handler.NewUserHandler(userService, authService)
 	campaignhandler := handler.NewCampaignHandler(campaignService)
 
+	router.Static("/images", "./storage/images")
 	router.GET("/", handler.Version)
 
 	api := router.Group("/api/v1")
@@ -35,7 +36,8 @@ func InitApi(state overseer.State) {
 	api.POST("/session", userhandler.Login)
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
 	api.POST("/avatars", middleware.AuthMiddleware(authService, userService), userhandler.UploadAvatar)
-	api.GET("/campaigns", campaignhandler.FindAllCamp)
+	api.GET("/campaigns", campaignhandler.GetAllCamp)
+	api.GET("/campaigns/:id", campaignhandler.GetCampain)
 
 	router.Run(":3000")
 

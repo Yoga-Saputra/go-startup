@@ -3,11 +3,13 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"runtime"
 	"startup/app/auth"
 	"startup/app/helper"
 	"startup/app/users"
 	"startup/config"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -162,15 +164,22 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 func (h *userHandler) UploadAvatar(c *gin.Context) {
 	file, err := c.FormFile("avatar")
 	responseErrorUploadAvatar(err, c)
+
 	currentUser := c.MustGet("current_user").(users.User)
 	userId := currentUser.ID
+
+	// get extensions file path
+	fileExtension := filepath.Ext(file.Filename)
 	// sprintf = menggabungkan string
-	path := fmt.Sprintf("storage/images/users/%d-%s", userId, file.Filename)
+	path := fmt.Sprintf("storage/images/users/%s_%d%s", "user_id", userId, fileExtension)
 	err = c.SaveUploadedFile(file, path)
+
 	responseErrorUploadAvatar(err, c)
 
 	_, err = h.userService.SaveAvatar(userId, path)
+
 	responseErrorUploadAvatar(err, c)
+
 	responseSuccessUploadAvatar(c)
 }
 
@@ -178,9 +187,15 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 
 func responseErrorUploadAvatar(err error, c *gin.Context) {
 	if err != nil {
+		// slice to string => strings.TrimSpace(str) = handle space before string
+		errr := strings.Split(err.Error(), "http:")
+		str := strings.Join(errr, "")
+		config.Loggers("error", err)
+
 		errorMsg := gin.H{"is_uploaded": false}
 		jsonContent := helper.InterfaceToJson(errorMsg)
-		response := helper.ApiResponse("failed to upload avatar", http.StatusBadRequest, "error", errorMsg)
+
+		response := helper.ApiResponse(strings.TrimSpace(str), http.StatusBadRequest, "error", errorMsg)
 		c.JSON(http.StatusBadRequest, response)
 		config.Loggers("error", string(jsonContent))
 		return
