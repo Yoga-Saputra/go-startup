@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"startup/app/campaign"
+	"startup/app/helper"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -19,9 +20,12 @@ func NewCampaignHandler(service campaign.Service) *campaignHandler {
 func (ch *campaignHandler) FindAllCamp(ctx *gin.Context) {
 	userId, _ := strconv.Atoi(ctx.Query("user_id"))
 	camp, err := ch.service.GetCampains(userId)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
-	}
 
-	ctx.JSON(http.StatusOK, camp)
+	if err != nil {
+		response := helper.ApiResponse("error to get campaigns", http.StatusBadRequest, "error", nil)
+		ctx.JSON(http.StatusBadRequest, response)
+	}
+	response := helper.ApiResponse("list of campaigns", http.StatusOK, "success", camp)
+
+	ctx.JSON(http.StatusOK, response)
 }
