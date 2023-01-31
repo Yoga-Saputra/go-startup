@@ -18,19 +18,22 @@ func InitApi(state overseer.State) {
 	router.Use(gin.Logger())
 
 	db := config.ConnectionDB()
+
+	// user
 	userRepository := users.NewRepository(db)
-	campaignRepository := campaign.NewRepository(db)
-
 	userService := users.NewService(userRepository)
-	campaignService := campaign.NewService(campaignRepository)
 	authService := auth.NewService()
-
 	userhandler := handler.NewUserHandler(userService, authService)
+
+	// campaign
+	campaignRepository := campaign.NewRepository(db)
+	campaignService := campaign.NewService(campaignRepository)
 	campaignhandler := handler.NewCampaignHandler(campaignService)
 
 	router.Static("/images", "./storage/images")
 	router.GET("/", handler.Version)
 
+	// routes prefix
 	api := router.Group("/api/v1")
 	api.POST("/users", userhandler.RegisterUser)
 	api.POST("/session", userhandler.Login)

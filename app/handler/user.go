@@ -67,7 +67,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	if !isEmailAvailable {
 		data := gin.H{"is_available": isEmailAvailable}
 		metaMsg := "email has been registerd"
-		response := helper.ApiResponse(metaMsg, http.StatusOK, "error", data)
+		response := helper.ApiResponse(metaMsg, http.StatusForbidden, "error", data)
 		c.JSON(http.StatusForbidden, response)
 		return
 	}
