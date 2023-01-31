@@ -73,12 +73,11 @@ func FormatCampaignSlice(campaigns []Campaign) []CampaignFormatter {
 
 func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
 	var image_url string
+	var perks []string
 
 	if len(campaign.CampaignImages) > 0 {
 		image_url = campaign.CampaignImages[0].FileName
 	}
-
-	var perks []string
 	// break the string  with strings.Split(campaign.Perks, ","),
 	for _, perk := range strings.Split(campaign.Perks, ",") {
 		perks = append(perks, strings.TrimSpace(perk)) //delete space string and combine them
