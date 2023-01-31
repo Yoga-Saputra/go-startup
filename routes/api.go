@@ -35,9 +35,13 @@ func InitApi(state overseer.State) {
 	api.POST("/users", userhandler.RegisterUser)
 	api.POST("/session", userhandler.Login)
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
-	api.POST("/avatars", middleware.AuthMiddleware(authService, userService), userhandler.UploadAvatar)
 	api.GET("/campaigns", campaignhandler.GetAllCamp)
 	api.GET("/campaigns/:id", campaignhandler.GetCampain)
+
+	// middleware grouping
+	apiMiddleware := api.Use(middleware.AuthMiddleware(authService, userService))
+	apiMiddleware.POST("/avatars", userhandler.UploadAvatar)
+	apiMiddleware.POST("/campaigns", campaignhandler.CreateCampaign)
 
 	router.Run(":3000")
 

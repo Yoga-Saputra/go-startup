@@ -77,8 +77,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	if err != nil {
 		errors := helper.FormatValidationError(err)
 		helper.ErrorValidation(err, c, "register account failed", "error", http.StatusUnprocessableEntity, errors)
-		// return
-		c.JSON(http.StatusOK, err)
+		return
 	}
 
 	user, err := h.userService.RegisterUser(input)
