@@ -11,6 +11,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// helper user
 type UserFormatter struct {
 	ID         int    `json:"id"`
 	Name       string `json:"name"`
