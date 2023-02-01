@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"net/http"
 	"startup/app/auth"
 	"startup/app/campaign"
 	"startup/app/handler"
@@ -10,10 +9,9 @@ import (
 	"startup/config"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jpillora/overseer"
 )
 
-func InitApi(state overseer.State) {
+func InitApi() {
 	router := gin.Default()
 	router.Use(gin.Logger())
 
@@ -47,6 +45,4 @@ func InitApi(state overseer.State) {
 	apiMiddleware.POST("/campaigns", campaignhandler.CreateCampaign)
 
 	router.Run(":3000")
-
-	http.Serve(state.Listener, router)
 }
