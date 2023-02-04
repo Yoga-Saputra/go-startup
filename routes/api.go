@@ -43,6 +43,7 @@ func InitApi() {
 	apiMiddleware := api.Use(middleware.AuthMiddleware(authService, userService))
 	apiMiddleware.POST("/avatars", userhandler.UploadAvatar)
 	apiMiddleware.POST("/campaigns", campaignhandler.CreateCampaign)
+	apiMiddleware.PUT("/campaigns/:id", campaignhandler.UpdateCampaign)
 
 	router.Run(":3000")
 }
