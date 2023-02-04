@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"startup/app/users"
 	"startup/config"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -66,4 +67,31 @@ func InterfaceToJson(params interface{}) []byte {
 		return jsonContent
 	}
 	return jsonContent
+}
+
+func InterfaceToInt(byteCode interface{}) (int, error) {
+	code, _ := json.Marshal(byteCode)
+	// convert []byte to int
+	codeInt, err := strconv.Atoi(string(code))
+	if err != nil {
+		return codeInt, err
+	}
+
+	return codeInt, nil
+}
+
+func StructToMap(obj interface{}) (newMap map[string]interface{}, err error) {
+	data, err := json.Marshal(obj) // Convert interface to a json string
+
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(data, &newMap) // Convert to a map
+
+	if err != nil {
+		return newMap, err
+	}
+
+	return
 }
