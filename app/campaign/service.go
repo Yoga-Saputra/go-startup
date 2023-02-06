@@ -3,6 +3,7 @@ package campaign
 import (
 	"errors"
 	"fmt"
+	"startup/config"
 
 	"github.com/gosimple/slug"
 )
@@ -12,6 +13,8 @@ type Service interface {
 	GetCampaignById(input GetCampaignDetailInput) (Campaign, error)
 	CreateCampaign(input CreateCampaignInput) (Campaign, error)
 	UpdateCampaign(inputId GetCampaignDetailInput, inputData CreateCampaignInput) (Campaign, error)
+	SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error)
+	CheckCampaignService(input CreateCampaignImageInput) (Campaign, error)
 }
 
 type service struct {
@@ -34,7 +37,15 @@ func (s *service) GetCampains(userId int) ([]Campaign, error) {
 
 func (s *service) GetCampaignById(input GetCampaignDetailInput) (Campaign, error) {
 	campaign, err := s.repository.FindById(input.ID)
+	if err != nil {
+		return campaign, err
+	}
 
+	return campaign, nil
+}
+
+func (s *service) CheckCampaignService(input CreateCampaignImageInput) (Campaign, error) {
+	campaign, err := s.repository.CheckCampaignRepository(input.CampaignId)
 	if err != nil {
 		return campaign, err
 	}
@@ -88,6 +99,50 @@ func (s *service) UpdateCampaign(inputId GetCampaignDetailInput, inputData Creat
 
 	return updateCampaign, nil
 
+}
+
+func (s *service) SaveCampaignImage(input CreateCampaignImageInput, fileLocation string) (CampaignImage, error) {
+	isPrimary := 0
+	if input.IsPrimary {
+		isPrimary = 1
+
+		_, err := s.repository.MarkAllImagesAsNonPrimary(input.CampaignId)
+
+		if err != nil {
+			return CampaignImage{}, err
+		}
+	}
+
+	campaign, err := s.repository.FindById(input.CampaignId)
+
+	if err != nil {
+		return CampaignImage{}, err
+	}
+
+	mapLog := map[string]interface{}{
+		"campaign_user_id": campaign.UserID,
+		"userId":           input.User.ID,
+	}
+	config.Loggers("error", mapLog)
+
+	if campaign.UserID != input.User.ID {
+		return CampaignImage{}, errors.New("you dont have permission for this campaign")
+	}
+
+	campaignImage := CampaignImage{
+		CampaignID: input.CampaignId,
+		IsPrimary:  isPrimary,
+		FileName:   fileLocation,
+	}
+
+	newCampaignImage, err := s.repository.CreateImage(campaignImage)
+	config.Loggers("error", err)
+
+	if err != nil {
+		return newCampaignImage, err
+	}
+
+	return newCampaignImage, nil
 }
 
 func returnHelper(err error, campaign []Campaign) ([]Campaign, error) {
