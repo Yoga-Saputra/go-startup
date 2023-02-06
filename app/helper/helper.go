@@ -7,15 +7,14 @@ import (
 )
 
 type (
+	response struct {
+		Meta meta        `json:"meta"`
+		Data interface{} `json:"data"`
+	}
 	meta struct {
 		Message string `json:"message"`
 		Code    int    `json:"code"`
 		Status  string `json:"status"`
-	}
-
-	response struct {
-		Meta meta        `json:"meta"`
-		Data interface{} `json:"data"`
 	}
 )
 
@@ -31,12 +30,13 @@ func ApiResponse(message string, code int, status string, data interface{}) inte
 		Data: data,
 	}
 
-	data, err := StructToMap(response)
-	if err != nil {
-		return nil
-	}
+	// data, err := StructToMap(response)
 
-	return data
+	// if err != nil {
+	// 	return nil
+	// }
+
+	return response
 }
 
 func GetInv(key string) string {

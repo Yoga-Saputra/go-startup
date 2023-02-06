@@ -44,6 +44,7 @@ func InitApi() {
 	apiMiddleware.POST("/avatars", userhandler.UploadAvatar)
 	apiMiddleware.POST("/campaigns", campaignhandler.CreateCampaign)
 	apiMiddleware.PUT("/campaigns/:id", campaignhandler.UpdateCampaign)
+	apiMiddleware.POST("/campaigns-images", campaignhandler.UploadImage)
 
 	router.Run(":3000")
 }
