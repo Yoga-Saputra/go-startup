@@ -21,15 +21,13 @@ import (
 func Version(c *gin.Context) {
 	now := time.Now()
 	nowFormat := now.Format("2006-01-02 15:04:05")
-	map1 := map[string]string{
+	map1 := map[string]interface{}{
 		"last_update": nowFormat,
 		"build_with":  "GO",
 		"version":     runtime.Version(),
 	}
 
-	// Convert the map to JSON
-	jsonContent := helper.MapToJson(map1)
-	config.Loggers("info", string(jsonContent))
+	config.Loggers("info", map1)
 
 	fmt.Println()
 
@@ -51,6 +49,7 @@ func NewUserHandler(userService users.Service, authService auth.Service) *userHa
 func (h *userHandler) RegisterUser(c *gin.Context) {
 	var inputCheckEmail users.CheckEmailInput
 	err := c.ShouldBindBodyWith(&inputCheckEmail, binding.JSON)
+
 	if err != nil {
 		errors := helper.FormatValidationError(err)
 		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusUnprocessableEntity, errors)
@@ -58,6 +57,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 	}
 
 	isEmailAvailable, err := h.userService.IsEmailAvailable(inputCheckEmail)
+
 	if err != nil {
 		errorMsg := gin.H{"error": "server error"}
 		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusBadRequest, errorMsg)
@@ -68,6 +68,7 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 		data := gin.H{"is_available": isEmailAvailable}
 		metaMsg := "email has been registerd"
 		response := helper.ApiResponse(metaMsg, http.StatusForbidden, "error", data)
+
 		c.JSON(http.StatusForbidden, response)
 		return
 	}
@@ -101,8 +102,8 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 // <========== start login ==============>
 func (h *userHandler) Login(c *gin.Context) {
 	var input users.LoginInput
-
 	err := c.ShouldBindJSON(&input)
+
 	if err != nil {
 		errors := helper.FormatValidationError(err)
 		helper.ErrorValidation(err, c, "login account failed", "error", http.StatusUnprocessableEntity, errors)
@@ -110,6 +111,7 @@ func (h *userHandler) Login(c *gin.Context) {
 	}
 
 	loggedinUser, err := h.userService.Login(input)
+
 	if err != nil {
 		helper.ErrorValidation(err, c, "login account failed", "error", http.StatusBadRequest, err.Error())
 		return
@@ -119,6 +121,7 @@ func (h *userHandler) Login(c *gin.Context) {
 	formatter := helper.FormatUser(loggedinUser, token)
 	response := helper.ApiResponse("successfully loggedin", http.StatusOK, "success", formatter)
 	config.Loggers("info", response)
+
 	c.JSON(http.StatusOK, response)
 }
 
@@ -128,6 +131,7 @@ func (h *userHandler) Login(c *gin.Context) {
 func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 	var input users.CheckEmailInput
 	err := c.ShouldBindJSON(&input)
+
 	if err != nil {
 		errors := helper.FormatValidationError(err)
 		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusUnprocessableEntity, errors)
@@ -135,7 +139,9 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 	}
 
 	isEmailAvailable, err := h.userService.IsEmailAvailable(input)
+
 	config.Loggers("error", isEmailAvailable)
+
 	if err != nil {
 		errorMsg := gin.H{"error": "server error"}
 		helper.ErrorValidation(err, c, "email checking failed", "error", http.StatusBadRequest, errorMsg)
@@ -153,7 +159,9 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context) {
 		success = "success"
 		metaMsg = "email is available"
 	}
+
 	response := helper.ApiResponse(metaMsg, code, success, data)
+
 	c.JSON(code, response)
 }
 
@@ -192,11 +200,11 @@ func responseErrorUploadAvatar(err error, c *gin.Context) {
 		config.Loggers("error", err)
 
 		errorMsg := gin.H{"is_uploaded": false}
-		jsonContent := helper.InterfaceToJson(errorMsg)
 
 		response := helper.ApiResponse(strings.TrimSpace(str), http.StatusBadRequest, "error", errorMsg)
+		config.Loggers("error", response)
+
 		c.JSON(http.StatusBadRequest, response)
-		config.Loggers("error", string(jsonContent))
 		return
 	}
 }
@@ -204,22 +212,25 @@ func responseErrorUploadAvatar(err error, c *gin.Context) {
 func responseSuccessUploadAvatar(c *gin.Context) {
 	successMsg := gin.H{"is_uploaded": true}
 	response := helper.ApiResponse("avatar successfully uploaded", http.StatusOK, "success", successMsg)
+
 	config.Loggers("info", response)
+
 	c.JSON(http.StatusOK, response)
 }
 
 func responseToken(id int, h *userHandler, c *gin.Context, msg string) string {
 	token, err := h.authService.GenerateToken(id)
+
 	if err != nil {
 		helper.ErrorValidation(err, c, msg, "error", http.StatusBadRequest, err)
 		return err.Error()
 	}
+
 	mapToken := map[string]interface{}{
 		"user_id": id,
 		"token":   token,
 	}
-	// Convert the map interface to JSON
-	jsonToken := helper.InterfaceToJson(mapToken)
-	config.Loggers("info", string(jsonToken))
+
+	config.Loggers("info", mapToken)
 	return token
 }
