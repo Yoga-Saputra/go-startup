@@ -6,3 +6,4 @@ config
 tmp/
 bin/
 .env
+startup
