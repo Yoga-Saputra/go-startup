@@ -1,6 +1,7 @@
 /storage
 /storage/*
 /config
+config
 *.tmp
 *.bin
 tmp/
