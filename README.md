@@ -28,15 +28,15 @@ RESTful API of <b>GO - Startup</b>
 ## 🔀 Compatible Route Endpoint
 | NO | Use                                 | Endpoint               | Example                                             | Action
 |----|-------------------------------------|------------------------|-----------------------------------------------------|------------
-| 1  | Register                            | api/v1/users           | http://104.248.153.255:4004/api/v1/users            | POST
-| 2  | Login                               | api/v1/session         | http://104.248.153.255:4004/api/v1/session          | POST
-| 3  | Email Checker                       | api/v1/email_checkers  | http://104.248.153.255:4004/api/v1/email_checkers   | POST
-| 4  | Upload Avatar                       | api/v1/avatars         | http://104.248.153.255:4004/api/v1/avatars          | POST
-| 5  | Get Campaigns                       | api/v1/campaigns       | http://104.248.153.255:4004/api/v1/campaigns        | GET
-| 6  | Create Campaign                     | api/v1/campaigns       | http://104.248.153.255:4004/api/v1/campaigns        | POST
-| 7  | Update Campaign                     | api/v1/campaigns/{id}  | http://104.248.153.255:4004/api/v1/campaigns/{id}   | PUT
-| 9  | Get Detail Campaign                 | api/v1/campaigns/{id}  | http://104.248.153.255:4004/api/v1/campaigns/{id}   | GET
-| 9  | Upload Campaign images              | api/v1/campaigns-images| http://104.248.153.255:4004/api/v1/campaigns-images | POST
+| 1  | Register                            | api/v1/users           | http://localhost:4004/api/v1/users            | POST
+| 2  | Login                               | api/v1/session         | http://localhost:4004/api/v1/session          | POST
+| 3  | Email Checker                       | api/v1/email_checkers  | http://localhost:4004/api/v1/email_checkers   | POST
+| 4  | Upload Avatar                       | api/v1/avatars         | http://localhost:4004/api/v1/avatars          | POST
+| 5  | Get Campaigns                       | api/v1/campaigns       | http://localhost:4004/api/v1/campaigns        | GET
+| 6  | Create Campaign                     | api/v1/campaigns       | http://localhost:4004/api/v1/campaigns        | POST
+| 7  | Update Campaign                     | api/v1/campaigns/{id}  | http://localhost:4004/api/v1/campaigns/{id}   | PUT
+| 9  | Get Detail Campaign                 | api/v1/campaigns/{id}  | http://localhost:4004/api/v1/campaigns/{id}   | GET
+| 9  | Upload Campaign images              | api/v1/campaigns-images| http://localhost:4004/api/v1/campaigns-images | POST
 | 10 | Transaction                         | On Progress            | On Progress                                         | On Progress 
 
 ---
