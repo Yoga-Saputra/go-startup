@@ -12,6 +12,7 @@ import (
 )
 
 func InitApi() {
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(gin.Logger())
 
