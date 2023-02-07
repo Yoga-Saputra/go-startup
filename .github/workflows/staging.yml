@@ -20,11 +20,13 @@ jobs:
             cd /var/www/go-startup
             git pull origin main
             sudo rm -rf startup
-            sudo service startup start
-            systemctl daemon-reload
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
           go-version: 1.19
       - name: Build
-        run: go build .
+        run: |
+          cd /var/www/go-startup
+          go build .
+          sudo service startup start
+          systemctl daemon-reload
