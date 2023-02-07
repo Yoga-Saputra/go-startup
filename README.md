@@ -115,7 +115,7 @@ Query-Params
 v1/campaigns/2
 ```
 
-### 💸 Upload Campaign images Form Data Payload (optional)
+### 💸 Upload Campaign images Form Data Payload
 ```js
 
 form-data
