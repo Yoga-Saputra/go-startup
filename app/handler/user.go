@@ -23,7 +23,7 @@ func Version(c *gin.Context) {
 	nowFormat := now.Format("2006-01-02 15:04:05")
 	map1 := map[string]interface{}{
 		"last_update": nowFormat,
-		"build_with":  "GO",
+		"build_with":  "GO BOSKU",
 		"version":     runtime.Version(),
 	}
 
