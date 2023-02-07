@@ -119,9 +119,9 @@ v1/campaigns/2
 ```js
 
 form-data
-    
-    | Key                 | Value               |
-    |---------------------|---------------------|
-    | campaign_id         | 1                   |
-    | is_primary          | true                |
-    | file                | campaign.png        |
+
+| Key                 | Value               |
+|---------------------|---------------------|
+| campaign_id         | 1                   |
+| is_primary          | true                |
+| file                | campaign.png        |
