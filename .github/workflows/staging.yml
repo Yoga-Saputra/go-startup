@@ -27,43 +27,9 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install Go and Run Code Linting
-      id: Install-Go
       uses: reviewdog/action-golangci-lint@v2
 
-    - name: Get dependencies to Build
-      id: Get-dependencies-to-Build
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
-
-<<<<<<< HEAD
     - name: Build Code
-      id: Build-Code
       run: |
         go build -v .
-=======
-      - name: Verify dependencies
-        run: cd /var/www/go-startup && go mod verify
-
-      - name: Build
-        run: go build -v ./...
-
-      - name: Run go vet
-        run: go vet ./...
-
-      - name: Install staticcheck
-        run: go install honnef.co/go/tools/cmd/staticcheck@latest
-
-      - name: Run staticcheck
-        run: staticcheck ./...
-
-      - name: Install golint
-        run: go install golang.org/x/lint/golint@latest
-
-      - name: Run golint
-        run: golint ./...
->>>>>>> fdb7b73c4792706ed46d8837b4a412728233ea08
       
