@@ -168,6 +168,7 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 
 	// save image to database
 	_, err = ch.service.SaveCampaignImage(input, path)
+	config.Loggers("error", err.Error())
 
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
