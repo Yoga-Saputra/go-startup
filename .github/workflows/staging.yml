@@ -5,45 +5,42 @@ on:
     branches: [ "main" ]
 
 jobs:
-  Deploy-to-Staging:
+  # Deploy-to-Staging:
+  #   runs-on: ubuntu-latest
+
+  #   steps:    
+  #     - name: "Deploy Go Startup"
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USERNAME }}
+  #         password: ${{ secrets.PASSWORD }}
+  #         port: ${{ secrets.PORT }}
+  #         script: |
+  #           cd /var/www/go-startup
+  #           git pull origin main
+  #           sudo rm -rf startup
+  build:
     runs-on: ubuntu-latest
+    steps:
+    - name: Check out code to Build
+      uses: actions/checkout@v3
 
-    steps:    
-      - name: "Deploy Go Startup"
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd /var/www/go-startup
-            git pull origin main
-            sudo rm -rf startup
+    - name: Install Go and Run Code Linting
+      id: Install-Go
+      uses: reviewdog/action-golangci-lint@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.19
+    - name: Get dependencies to Build
+      id: Get-dependencies-to-Build
+      run: |
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi
 
-      - name: Verify dependencies
-        run: go mod verify
-
-      - name: Build
-        run: go build -v ./...
-
-      - name: Run go vet
-        run: go vet ./...
-
-      - name: Install staticcheck
-        run: go install honnef.co/go/tools/cmd/staticcheck@latest
-
-      - name: Run staticcheck
-        run: staticcheck ./...
-
-      - name: Install golint
-        run: go install golang.org/x/lint/golint@latest
-
-      - name: Run golint
-        run: golint ./...
+    - name: Build Code
+      id: Build-Code
+      run: |
+        go build -v .
       
