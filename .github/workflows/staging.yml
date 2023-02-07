@@ -23,6 +23,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /var/www/go-startup
+            git pull origin main
             go build .
             sudo service startup start
             systemctl daemon-reload
