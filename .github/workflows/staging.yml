@@ -5,27 +5,46 @@ on:
     branches: [ "main" ]
 
 jobs:
-  Deploy-to-Staging:
+  # Deploy-to-Staging:
+  #   runs-on: ubuntu-latest
+
+  #   steps:    
+  #     - name: "Deploy Go Startup"
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USERNAME }}
+  #         password: ${{ secrets.PASSWORD }}
+  #         port: ${{ secrets.PORT }}
+  #         script: |
+  #           cd /var/www/go-startup
+  #           git pull origin main
+  #           sudo rm -rf startup
+  build:
     runs-on: ubuntu-latest
+    steps:
+    - name: Check out code to Build
+      uses: actions/checkout@v3
 
-    steps:    
-      - name: "Deploy Go Startup"
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd /var/www/go-startup
-            git pull origin main
-            sudo rm -rf startup
+    - name: Install Go and Run Code Linting
+      id: Install-Go
+      uses: reviewdog/action-golangci-lint@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.19
+    - name: Get dependencies to Build
+      id: Get-dependencies-to-Build
+      run: |
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi
 
+<<<<<<< HEAD
+    - name: Build Code
+      id: Build-Code
+      run: |
+        go build -v .
+=======
       - name: Verify dependencies
         run: cd /var/www/go-startup && go mod verify
 
@@ -46,4 +65,5 @@ jobs:
 
       - name: Run golint
         run: golint ./...
+>>>>>>> fdb7b73c4792706ed46d8837b4a412728233ea08
       
