@@ -28,5 +28,5 @@ jobs:
 
     - name: Build Code
       run: |
-        go build -v .
+        go build -v ./...
       
