@@ -5,65 +5,29 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # Deploy-to-Staging:
-  #   runs-on: ubuntu-latest
-
-  #   steps:    
-  #     - name: "Deploy Go Startup"
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USERNAME }}
-  #         password: ${{ secrets.PASSWORD }}
-  #         port: ${{ secrets.PORT }}
-  #         script: |
-  #           cd /var/www/go-startup
-  #           git pull origin main
-  #           sudo rm -rf startup
-  build:
+  Deploy-to-Staging:
     runs-on: ubuntu-latest
-    steps:
-    - name: Check out code to Build
-      uses: actions/checkout@v3
 
-    - name: Install Go and Run Code Linting
-      id: Install-Go
-      uses: reviewdog/action-golangci-lint@v2
+    steps:    
+      - name: "Deploy Go Startup"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /var/www/
+            git clone --branch main https://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@github.com/Yoga-Saputra/go-startup.git
+            git pull origin main
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Check out code to Build
+  #     uses: actions/checkout@v3
 
-    - name: Get dependencies to Build
-      id: Get-dependencies-to-Build
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
-
-<<<<<<< HEAD
-    - name: Build Code
-      id: Build-Code
-      run: |
-        go build -v .
-=======
-      - name: Verify dependencies
-        run: cd /var/www/go-startup && go mod verify
-
-      - name: Build
-        run: go build -v ./...
-
-      - name: Run go vet
-        run: go vet ./...
-
-      - name: Install staticcheck
-        run: go install honnef.co/go/tools/cmd/staticcheck@latest
-
-      - name: Run staticcheck
-        run: staticcheck ./...
-
-      - name: Install golint
-        run: go install golang.org/x/lint/golint@latest
-
-      - name: Run golint
-        run: golint ./...
->>>>>>> fdb7b73c4792706ed46d8837b4a412728233ea08
+  #   - name: Build Code
+  #     run: |
+  #       go mod tidy
+  #       go build -v ./...
       
