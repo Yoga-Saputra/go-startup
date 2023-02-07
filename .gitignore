@@ -1,8 +1,9 @@
-# /storage
-# /storage/*
-# /config
+/storage
+/storage/*
+/config
 *.tmp
 *.bin
 tmp/
 bin/
 .env
+startup
