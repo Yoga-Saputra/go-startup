@@ -6,6 +6,7 @@ import (
 	"startup/app/campaign"
 	"startup/app/helper"
 	"startup/app/users"
+	"startup/config"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -158,6 +159,7 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 
 	// save image to derectory
 	err = ctx.SaveUploadedFile(file, path)
+	config.Loggers("error", err.Error())
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
 		ErrorResponseCampaign("failed to upload campaign image", ctx, err, data)
