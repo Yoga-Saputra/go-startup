@@ -17,9 +17,9 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /var/www/go-startup
+            cd /var/www/
+            git clone --branch main https://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@github.com/Yoga-Saputra/go-startup.git
             git pull origin main
-            sudo rm -rf startup
   # build:
   #   runs-on: ubuntu-latest
   #   steps:
