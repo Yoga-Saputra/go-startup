@@ -39,8 +39,31 @@ jobs:
             dep ensure
         fi
 
+<<<<<<< HEAD
     - name: Build Code
       id: Build-Code
       run: |
         go build -v .
+=======
+      - name: Verify dependencies
+        run: cd /var/www/go-startup && go mod verify
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Run go vet
+        run: go vet ./...
+
+      - name: Install staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
+
+      - name: Run staticcheck
+        run: staticcheck ./...
+
+      - name: Install golint
+        run: go install golang.org/x/lint/golint@latest
+
+      - name: Run golint
+        run: golint ./...
+>>>>>>> fdb7b73c4792706ed46d8837b4a412728233ea08
       
