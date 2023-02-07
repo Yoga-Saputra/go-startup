@@ -28,6 +28,6 @@ jobs:
 
     - name: Build Code
       run: |
-        go mod tidy
+        go mod verify
         go build -v ./...
       
