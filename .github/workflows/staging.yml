@@ -19,14 +19,7 @@ jobs:
           script: |
             cd /var/www/go-startup
             git pull origin main
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Check out code to Build
-  #     uses: actions/checkout@v3
-
-  #   - name: Build Code
-  #     run: |
-  #       go mod tidy
-  #       go build -v ./...
+            rm -rf /var/www/go-startup/startup
+            export PATH=$PATH:/usr/local/go/bin
+            go build .
       
