@@ -46,5 +46,5 @@ func InitApi() {
 	apiMiddleware.PUT("/campaigns/:id", campaignhandler.UpdateCampaign)
 	apiMiddleware.POST("/campaigns-images", campaignhandler.UploadImage)
 
-	router.Run(":3000")
+	router.Run(":4004")
 }

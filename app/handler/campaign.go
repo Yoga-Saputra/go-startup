@@ -120,7 +120,7 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 
 	if err != nil {
 		errors := helper.FormatValidationError(err)
-		response := helper.ApiResponse("failed to upload campaign image", http.StatusBadRequest, "error", errors)
+		response := helper.ApiResponse("failed to upload campaign image ll", http.StatusBadRequest, "error", errors)
 
 		ctx.JSON(http.StatusBadRequest, response)
 		return
@@ -140,7 +140,7 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
-		ErrorResponseCampaign("failed to upload campaign image", ctx, err, data)
+		ErrorResponseCampaign("failed to upload campaign image 0", ctx, err, data)
 		return
 	}
 
@@ -148,7 +148,7 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
-		ErrorResponseCampaign("failed to upload campaign image", ctx, err, data)
+		ErrorResponseCampaign("failed to upload campaign image 1", ctx, err, data)
 		return
 	}
 
@@ -159,20 +159,20 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 
 	// save image to derectory
 	err = ctx.SaveUploadedFile(file, path)
-	config.Loggers("error", err.Error())
+	config.Loggers("error", err)
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
-		ErrorResponseCampaign("failed to upload campaign image", ctx, err, data)
+		ErrorResponseCampaign("failed to upload campaign image 2", ctx, err, data)
 		return
 	}
 
 	// save image to database
 	_, err = ch.service.SaveCampaignImage(input, path)
-	config.Loggers("error", err.Error())
+	config.Loggers("error", err)
 
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
-		ErrorResponseCampaign("failed to upload campaign image", ctx, err, data)
+		ErrorResponseCampaign("failed to upload campaign image 3", ctx, err, data)
 		return
 	}
 
