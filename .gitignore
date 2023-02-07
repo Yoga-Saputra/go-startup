@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 /storage
 /storage/*
 /config
 config
+=======
+# /storage
+# /storage/*
+# /config
+>>>>>>> parent of 1749ff3 (testing go build using github action)
 *.tmp
 *.bin
 tmp/
 bin/
 .env
-startup
