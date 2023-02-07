@@ -24,6 +24,7 @@ jobs:
           script: |
             cd /var/www/go-startup
             git pull origin main
+            sudo rm -rf startup
             go build .
             sudo service startup start
             systemctl daemon-reload
