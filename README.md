@@ -79,7 +79,7 @@ form-data
 | avatar              | images.png          |
 ```
 
-### ⏪ Get Campaigns Query Param Payload (optional)
+### 💸 Get Campaigns Query Param Payload (optional)
 ```js
 
 Query-Params
@@ -115,7 +115,7 @@ Query-Params
 v1/campaigns/2
 ```
 
-### ⏪ Upload Campaign images Form Data Payload (optional)
+### 💸 Upload Campaign images Form Data Payload (optional)
 ```js
 
 form-data
