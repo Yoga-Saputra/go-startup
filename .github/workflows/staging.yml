@@ -28,5 +28,6 @@ jobs:
 
     - name: Build Code
       run: |
+        cd /var/www/go-startup
         go build -v ./...
       
