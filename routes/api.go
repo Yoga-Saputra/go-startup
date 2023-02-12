@@ -5,6 +5,7 @@ import (
 	"startup/app/campaign"
 	"startup/app/handler"
 	"startup/app/middleware"
+	"startup/app/transaction"
 	"startup/app/users"
 	"startup/config"
 
@@ -29,6 +30,11 @@ func InitApi() {
 	campaignService := campaign.NewService(campaignRepository)
 	campaignhandler := handler.NewCampaignHandler(campaignService)
 
+	// transaction
+	transactionRepository := transaction.NewRepository(db)
+	transactionService := transaction.NewService(transactionRepository, campaignRepository)
+	transactionnhandler := handler.NewTransaction(transactionService)
+
 	router.Static("/images", "./storage/images")
 	router.GET("/", handler.Version)
 
@@ -46,6 +52,8 @@ func InitApi() {
 	apiMiddleware.POST("/campaigns", campaignhandler.CreateCampaign)
 	apiMiddleware.PUT("/campaigns/:id", campaignhandler.UpdateCampaign)
 	apiMiddleware.POST("/campaigns-images", campaignhandler.UploadImage)
+
+	apiMiddleware.GET("/campaigns/:id/transaction", transactionnhandler.GetCampaignTransaction)
 
 	router.Run(":4004")
 }
