@@ -4,4 +4,4 @@ export PATH=$PATH:/usr/local/go/bin
 go build .
 sudo service startup stop
 sudo service startup start
-systemctl daemon-reload
+systemctl daemon-reloads
