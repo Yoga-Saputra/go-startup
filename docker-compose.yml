@@ -12,10 +12,10 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - db_mysql_startup_new
+      - db_mysql_startup
       
-  db_mysql_startup_new:
-    container_name: mysql_db_startup_new
+  db_mysql_startup:
+    container_name: mysql_db_startup
     platform: linux/x86_64
     image: mysql:5.7
     ports: 
@@ -27,7 +27,7 @@ services:
       # - "MYSQL_DBNAME=${MYSQL_DBNAME}" 
       # - "MYSQL_HOST=${MYSQL_HOST}"
     volumes:
-      - mysql_db_startup_new:/var/lib/mysql
+      - mysql_db_startup:/var/lib/mysql
       
 volumes:
-  mysql_db_startup_new:
+  mysql_db_startup:
