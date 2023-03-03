@@ -7,24 +7,27 @@ services:
       # Correct the path to your Dockerfile
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 4004:4004
     # Important to bind/mount your codebase dir to /app dir for live reload
     volumes:
       - ./:/app
     depends_on:
-      - db_mysql_startup
+      - db_mysql_startup_new
       
-  db_mysql_startup:
-    container_name: mysql_db_startup
+  db_mysql_startup_new:
+    container_name: mysql_db_startup_new
     platform: linux/x86_64
     image: mysql:5.7
     ports: 
-      - 3306:3306
-    environment: 
-      - MYSQL_DATABASE=golang_startup
-      - MYSQL_ROOT_PASSWORD=P@ssW0rd
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}"
+      - "MYSQL_DATABASE=${MYSQL_DBNAME}"
+      # - "MYSQL_ROOT_USER=${MYSQL_USER}"
+      # - "MYSQL_DBNAME=${MYSQL_DBNAME}" 
+      # - "MYSQL_HOST=${MYSQL_HOST}"
     volumes:
-      - mysql_db_startup:/var/lib/mysql
+      - mysql_db_startup_new:/var/lib/mysql
       
 volumes:
-  mysql_db_startup:
+  mysql_db_startup_new:
