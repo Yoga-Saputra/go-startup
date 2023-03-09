@@ -37,7 +37,7 @@ RESTful API of <b>GO - Startup</b>
 | 7  | Update Campaign                     | api/v1/campaigns/{id}  | http://localhost:4004/api/v1/campaigns/{id}   | PUT
 | 9  | Get Detail Campaign                 | api/v1/campaigns/{id}  | http://localhost:4004/api/v1/campaigns/{id}   | GET
 | 9  | Upload Campaign images              | api/v1/campaigns-images| http://localhost:4004/api/v1/campaigns-images | POST
-| 10 | Transaction(using midtrans payment) | On Progress            | On Progress                                         | On Progress 
+| 10 | Transaction(using midtrans payment) | On Progress            | On Progress                                   | On Progress 
 
 ---
 
