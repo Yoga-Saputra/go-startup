@@ -59,8 +59,3 @@ func InitApi() {
 
 	router.Run(":4004")
 }
-
-// docker run -e MYSQL_HOST=127.0.0.1 -e MYSQL_USER=root -e MYSQL_PASSWORD=P@ssW0rd -e MYSQL_DBNAME=golang_startup -p 4004:4004 -d --name starupConDB my-startup-app
-
-// * docker run --name mysqlDocker -e MYSQL_ROOT_PASSWORD=P@ssW0rd -e MYSQL_DATABASE=golang_startup -d -p 3333:3306 mysql:5.7
-// docker run --name mysqlDocker -e MYSQL_ROOT_PASSWORD=P@ssW0rd -e MYSQL_DATABASE=golang_startup -d -p 3333:3306 mysql:5.7
