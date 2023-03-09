@@ -3,7 +3,6 @@ package transaction
 import (
 	"errors"
 	"startup/app/campaign"
-	"startup/config"
 	"strconv"
 )
 
@@ -14,6 +13,7 @@ type service struct {
 
 type Service interface {
 	GetTransactionByCampaignId(input GetCampaignTransactionInput) ([]Transaction, error)
+	GetTransactionByUserId(userId int) ([]Transaction, error)
 }
 
 func NewService(repository Repository, campaignRepository campaign.Repository) *service {
@@ -23,7 +23,6 @@ func NewService(repository Repository, campaignRepository campaign.Repository) *
 func (s *service) GetTransactionByCampaignId(input GetCampaignTransactionInput) ([]Transaction, error) {
 
 	campaign, err := s.campaignRepository.FindById(input.ID)
-	config.Loggers("error", campaign)
 	if err != nil {
 		return []Transaction{}, err
 	}
@@ -43,4 +42,13 @@ func (s *service) GetTransactionByCampaignId(input GetCampaignTransactionInput) 
 	}
 
 	return transaction, nil
+}
+
+func (s *service) GetTransactionByUserId(userId int) ([]Transaction, error) {
+	transactions, err := s.repository.GetByUserId(userId)
+	if err != nil {
+		return transactions, err
+	}
+
+	return transactions, nil
 }

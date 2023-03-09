@@ -55,6 +55,7 @@ func InitApi() {
 	apiMiddleware.POST("/campaigns-images", campaignhandler.UploadImage)
 
 	apiMiddleware.GET("/campaigns/:id/transaction", transactionnhandler.GetCampaignTransaction)
+	apiMiddleware.GET("/transaction", transactionnhandler.GetUserTransaction)
 
 	router.Run(":4004")
 }
