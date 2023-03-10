@@ -86,3 +86,29 @@ func FormatUserSlice(transactions []Transaction) []UserTransactionFormater {
 
 	return usersFormatter
 }
+
+type TransactionFormatter struct {
+	Id         int    `json:"id"`
+	CampaignID int    `json:"name"`
+	UserID     int    `json:"user_id"`
+	Amount     int    `json:"amount"`
+	Status     string `json:"status"`
+	Code       string `json:"code"`
+	PaymentURL string `json:"payment_url"`
+}
+
+// slice transactions
+func FormatTransaction(transaction Transaction) TransactionFormatter {
+
+	formater := TransactionFormatter{
+		Id:         transaction.ID,
+		CampaignID: transaction.CampaignID,
+		Amount:     transaction.Amount,
+		UserID:     transaction.UserID,
+		Status:     transaction.Status,
+		Code:       transaction.Code,
+		PaymentURL: transaction.PaymentURL,
+	}
+
+	return formater
+}
