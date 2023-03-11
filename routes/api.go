@@ -52,6 +52,9 @@ func InitApi() {
 	api := router.Group("/api/v1")
 	api.POST("/users", userhandler.RegisterUser)
 	api.POST("/session", userhandler.Login)
+	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
+	api.GET("/campaigns", campaignhandler.GetAllCamp)
+	api.GET("/campaigns/:id", campaignhandler.GetCampain)
 
 	api.POST("/transaction/notification", transactionnhandler.GetNotification)
 
@@ -62,7 +65,6 @@ func InitApi() {
 	apiMiddleware.PUT("/campaigns/:id", campaignhandler.UpdateCampaign)
 	apiMiddleware.POST("/campaigns-images", campaignhandler.UploadImage)
 	apiMiddleware.GET("/users/fetch", userhandler.FetchUser)
-	apiMiddleware.POST("/email_checkers", userhandler.CheckEmailAvailability)
 
 	apiMiddleware.GET("/campaigns/:id/transaction", transactionnhandler.GetCampaignTransaction)
 	apiMiddleware.GET("/transaction", transactionnhandler.GetUserTransaction)
