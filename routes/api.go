@@ -37,6 +37,7 @@ func InitApi() {
 
 	// transaction
 	transactionRepository := transaction.NewRepository(db)
+
 	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 	transactionnhandler := handler.NewTransaction(transactionService)
 
@@ -50,6 +51,8 @@ func InitApi() {
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
 	api.GET("/campaigns", campaignhandler.GetAllCamp)
 	api.GET("/campaigns/:id", campaignhandler.GetCampain)
+
+	api.POST("/transaction/notification", transactionnhandler.GetNotification)
 
 	// middleware grouping
 	apiMiddleware := api.Use(middleware.AuthMiddleware(authService, userService))
