@@ -10,6 +10,7 @@ import (
 	"startup/app/users"
 	"startup/config"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,6 +19,9 @@ func InitApi() {
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 	router.Use(gin.Logger())
+
+	// cors
+	router.Use(cors.Default())
 
 	db := config.ConnectionDB()
 
