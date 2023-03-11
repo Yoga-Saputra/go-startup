@@ -11,7 +11,7 @@ type repository struct {
 type Repository interface {
 	GetByCampaignId(campaignId int) ([]Transaction, error)
 	GetByUserId(userId int) ([]Transaction, error)
-	GetById(ID int) (Transaction, error)
+	GetById(code string) (Transaction, error)
 	Save(transaction Transaction) (Transaction, error)
 	Update(transaction Transaction) (Transaction, error)
 }
@@ -20,9 +20,9 @@ func NewRepository(db *gorm.DB) *repository {
 	return &repository{db}
 }
 
-func (r *repository) GetById(ID int) (Transaction, error) {
+func (r *repository) GetById(code string) (Transaction, error) {
 	var transaction Transaction
-	err := r.db.Where("id = ?", ID).Find(&transaction).Error
+	err := r.db.Where("code = ?", code).Find(&transaction).Error
 
 	if err != nil {
 		return transaction, err

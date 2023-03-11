@@ -98,9 +98,8 @@ func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, 
 }
 
 func (s *service) ProcessPayment(input TransactionNotificationInput) error {
-	transaction_id, _ := strconv.Atoi(input.OrderID)
 
-	transaction, err := s.repository.GetById(transaction_id)
+	transaction, err := s.repository.GetById(input.OrderID)
 
 	if err != nil {
 		return err
