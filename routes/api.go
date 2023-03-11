@@ -51,7 +51,6 @@ func InitApi() {
 	// routes prefix
 	api := router.Group("/api/v1")
 	api.POST("/users", userhandler.RegisterUser)
-	api.GET("/users/fetch", userhandler.FetchUser)
 	api.POST("/session", userhandler.Login)
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
 	api.GET("/campaigns", campaignhandler.GetAllCamp)
@@ -65,6 +64,7 @@ func InitApi() {
 	apiMiddleware.POST("/campaigns", campaignhandler.CreateCampaign)
 	apiMiddleware.PUT("/campaigns/:id", campaignhandler.UpdateCampaign)
 	apiMiddleware.POST("/campaigns-images", campaignhandler.UploadImage)
+	apiMiddleware.GET("/users/fetch", userhandler.FetchUser)
 
 	apiMiddleware.GET("/campaigns/:id/transaction", transactionnhandler.GetCampaignTransaction)
 	apiMiddleware.GET("/transaction", transactionnhandler.GetUserTransaction)
