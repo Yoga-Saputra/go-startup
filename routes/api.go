@@ -64,6 +64,7 @@ func InitApi() {
 	apiMiddleware.POST("/campaigns", campaignhandler.CreateCampaign)
 	apiMiddleware.PUT("/campaigns/:id", campaignhandler.UpdateCampaign)
 	apiMiddleware.POST("/campaigns-images", campaignhandler.UploadImage)
+	apiMiddleware.GET("/users/fetch", userhandler.FetchUser)
 
 	apiMiddleware.GET("/campaigns/:id/transaction", transactionnhandler.GetCampaignTransaction)
 	apiMiddleware.GET("/transaction", transactionnhandler.GetUserTransaction)
