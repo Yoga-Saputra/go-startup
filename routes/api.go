@@ -19,6 +19,8 @@ func InitApi() {
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 	router.Use(gin.Logger())
+
+	// cors
 	router.Use(cors.Default())
 
 	db := config.ConnectionDB()
