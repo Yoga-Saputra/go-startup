@@ -234,3 +234,13 @@ func responseToken(id int, h *userHandler, c *gin.Context, msg string) string {
 	config.Loggers("info", mapToken)
 	return token
 }
+
+func (h *userHandler) FetchUser(c *gin.Context) {
+	currentUser := c.MustGet("current_user").(users.User)
+
+	formatter := users.FormatUser(currentUser, "")
+
+	response := helper.ApiResponse("successfully fetch user data", http.StatusOK, "success", formatter)
+
+	c.JSON(http.StatusOK, response)
+}

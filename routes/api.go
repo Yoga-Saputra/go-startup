@@ -51,6 +51,7 @@ func InitApi() {
 	// routes prefix
 	api := router.Group("/api/v1")
 	api.POST("/users", userhandler.RegisterUser)
+	api.POST("/users/fetch", userhandler.FetchUser)
 	api.POST("/session", userhandler.Login)
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
 	api.GET("/campaigns", campaignhandler.GetAllCamp)
