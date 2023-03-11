@@ -38,7 +38,7 @@ RESTful API of <b>GO - Startup</b>
 | 9  | Get Detail Campaign                        | api/v1/campaigns/{id}  | http://dolan.my.id/api/v1/campaigns/{id}   | GET
 | 9  | Upload Campaign images                     | api/v1/campaigns-images| http://dolan.my.id/api/v1/campaigns-images | POST
 | 10 | Get Transaction(using midtrans payment)    | api/v1/transaction     | http://dolan.my.id/api/v1/transaction      | GET
-| 10 | Create Transaction(using midtrans payment) | api/v1/transaction     | http://dolan.my.id/api/v1/transaction      | POST
+| 11 | Create Transaction(using midtrans payment) | api/v1/transaction     | http://dolan.my.id/api/v1/transaction      | POST
 
 ---
 
