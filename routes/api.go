@@ -5,6 +5,7 @@ import (
 	"startup/app/campaign"
 	"startup/app/handler"
 	"startup/app/middleware"
+	"startup/app/payment"
 	"startup/app/transaction"
 	"startup/app/users"
 	"startup/config"
@@ -31,9 +32,13 @@ func InitApi() {
 	campaignService := campaign.NewService(campaignRepository)
 	campaignhandler := handler.NewCampaignHandler(campaignService)
 
+	// payment
+	paymentService := payment.NewService()
+
 	// transaction
 	transactionRepository := transaction.NewRepository(db)
-	transactionService := transaction.NewService(transactionRepository, campaignRepository)
+
+	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 	transactionnhandler := handler.NewTransaction(transactionService)
 
 	router.Static("/images", "./storage/images")
@@ -46,6 +51,8 @@ func InitApi() {
 	api.POST("/email_checkers", userhandler.CheckEmailAvailability)
 	api.GET("/campaigns", campaignhandler.GetAllCamp)
 	api.GET("/campaigns/:id", campaignhandler.GetCampain)
+
+	api.POST("/transaction/notification", transactionnhandler.GetNotification)
 
 	// middleware grouping
 	apiMiddleware := api.Use(middleware.AuthMiddleware(authService, userService))
