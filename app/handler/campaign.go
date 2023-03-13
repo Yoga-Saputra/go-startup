@@ -140,7 +140,7 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
-		ErrorResponseCampaign("failed to upload campaign image 0", ctx, err, data)
+		ErrorResponseCampaign(err.Error(), ctx, err, data)
 		return
 	}
 
@@ -148,7 +148,7 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
-		ErrorResponseCampaign("failed to upload campaign image 1", ctx, err, data)
+		ErrorResponseCampaign(err.Error(), ctx, err, data)
 		return
 	}
 
@@ -162,17 +162,18 @@ func (ch *campaignHandler) UploadImage(ctx *gin.Context) {
 	config.Loggers("error", err)
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
-		ErrorResponseCampaign("failed to upload campaign image 2", ctx, err, data)
+		ErrorResponseCampaign(err.Error(), ctx, err, data)
 		return
 	}
 
 	// save image to database
-	_, err = ch.service.SaveCampaignImage(input, path)
+	newPath := fmt.Sprintf("%s/images/campaigns/%d-%s", ctx.Request.Host, userId, file.Filename)
+	_, err = ch.service.SaveCampaignImage(input, newPath)
 	config.Loggers("error", err)
 
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
-		ErrorResponseCampaign("failed to upload campaign image 3", ctx, err, data)
+		ErrorResponseCampaign(err.Error(), ctx, err, data)
 		return
 	}
 

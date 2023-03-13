@@ -60,6 +60,30 @@ func (h *transactionnhandler) GetUserTransaction(c *gin.Context) {
 
 }
 
+func (h *transactionnhandler) ExcelTransaction(c *gin.Context) {
+	currentUser := c.MustGet("current_user").(users.User)
+
+	userID := currentUser.ID
+
+	data, err := h.sercive.GetTransactionByUserId(userID)
+
+	if err != nil {
+		response := helper.ApiResponse("failed to get user's transaction", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	if len(data) > 0 {
+		response := helper.ApiResponse("successfully export transaction to excel", http.StatusOK, "success", nil)
+		c.JSON(http.StatusOK, response)
+		return
+	}
+
+	response := helper.ApiResponse("no data found", http.StatusNotFound, "false", nil)
+	c.JSON(http.StatusOK, response)
+
+}
+
 func (h *transactionnhandler) CreateTransaction(c *gin.Context) {
 	var input transaction.CreateTransactionInput
 

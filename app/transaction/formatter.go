@@ -97,7 +97,7 @@ type TransactionFormatter struct {
 	PaymentURL string `json:"payment_url"`
 }
 
-// slice transactions
+// transactions
 func FormatTransaction(transaction Transaction) TransactionFormatter {
 
 	formater := TransactionFormatter{
