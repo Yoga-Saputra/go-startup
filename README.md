@@ -43,7 +43,6 @@ RESTful API of <b>GO - Startup</b>
 
 ---
 
-
 ## 📖 Compatible JSON Payload Startup API
 This is the JSON payload that's sended to Startup API
 
