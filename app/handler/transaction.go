@@ -68,13 +68,22 @@ func (h *transactionnhandler) ExcelTransaction(c *gin.Context) {
 	data, err := h.sercive.GetTransactionByUserId(userID)
 
 	if err != nil {
-		response := helper.ApiResponse("failed to get user's transaction", http.StatusBadRequest, "error", nil)
+		response := helper.ApiResponse(err.Error(), http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	trans := transaction.FormatUserSliceExcel(data)
+	// generate excel
+	err = h.sercive.ExportExcel(trans)
+	if err != nil {
+		response := helper.ApiResponse(err.Error(), http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
 	if len(data) > 0 {
-		response := helper.ApiResponse("successfully export transaction to excel", http.StatusOK, "success", nil)
+		response := helper.ApiResponse("successfully export transaction to excel", http.StatusOK, "success", trans)
 		c.JSON(http.StatusOK, response)
 		return
 	}

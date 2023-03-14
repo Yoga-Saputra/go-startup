@@ -46,9 +46,53 @@ type UserTransactionFormater struct {
 	Campaign  CampaignFormatter `json:"campaign"`
 }
 
+type UserTransactionExcel struct {
+	Id               int       `json:"id"`
+	Amount           int       `json:"amount"`
+	Status           string    `json:"status"`
+	TransactionId    string    `json:"transaction_id"`
+	CampaignName     string    `json:"campaign_name"`
+	CampaignImageUrl string    `json:"campaign_image_url"`
+	CreatedAt        time.Time `json:"created_at"`
+}
+
 type CampaignFormatter struct {
 	Name     string `json:"name"`
 	ImageURL string `json:"image_url"`
+}
+
+func FormatUserTransactionExcel(transaction Transaction) UserTransactionExcel {
+	formatter := UserTransactionExcel{}
+	formatter.Id = transaction.ID
+	formatter.Amount = transaction.Amount
+	formatter.Status = transaction.Status
+	formatter.TransactionId = transaction.Code
+	formatter.CreatedAt = transaction.CreatedAt
+
+	formatter.CampaignName = transaction.Campaign.Name
+	formatter.CampaignImageUrl = ""
+
+	if len(transaction.Campaign.CampaignImages) > 0 {
+		formatter.CampaignImageUrl = transaction.Campaign.CampaignImages[0].FileName
+	}
+
+	return formatter
+}
+
+// mapping  slice users
+func FormatUserSliceExcel(transactions []Transaction) []UserTransactionExcel {
+	usersFormatter := []UserTransactionExcel{}
+
+	if len(transactions) == 0 {
+		return usersFormatter
+	}
+
+	for _, transaction := range transactions {
+		transactionFormatter := FormatUserTransactionExcel(transaction)
+		usersFormatter = append(usersFormatter, transactionFormatter)
+	}
+
+	return usersFormatter
 }
 
 func FormatUserTransaction(transaction Transaction) UserTransactionFormater {

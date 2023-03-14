@@ -2,10 +2,12 @@ package transaction
 
 import (
 	"errors"
+	"fmt"
 	"startup/app/campaign"
 	"startup/app/payment"
 	"strconv"
 
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/google/uuid"
 )
 
@@ -20,6 +22,7 @@ type Service interface {
 	GetTransactionByUserId(userId int) ([]Transaction, error)
 	CreateTransaction(input CreateTransactionInput) (Transaction, error)
 	ProcessPayment(input TransactionNotificationInput) error
+	ExportExcel(data []UserTransactionExcel) error
 }
 
 func NewService(repository Repository, campaignRepository campaign.Repository, paymentService payment.Service) *service {
@@ -141,4 +144,47 @@ func (s *service) ProcessPayment(input TransactionNotificationInput) error {
 	}
 
 	return nil
+}
+
+func (s *service) ExportExcel(transaction []UserTransactionExcel) error {
+	headers := map[string]string{
+		"A1": "transaction_id",
+		"B1": "amount",
+		"C1": "status",
+		"D1": "transaction_code",
+		"E1": "campaign_name",
+		"F1": "campaign_image_url",
+		"G1": "created_at",
+	}
+	file := excelize.NewFile()
+	for k, v := range headers {
+		file.SetCellValue("Sheet1", k, v)
+	}
+	fmt.Println(transaction)
+	for i := 0; i < len(transaction); i++ {
+		appendRow(file, i, transaction)
+	}
+
+	var filename string = fmt.Sprintf("storage/excel/transaction.xlsx")
+
+	err := file.SaveAs(filename)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Append every row, we can add styles if neeeded
+func appendRow(file *excelize.File, index int, transaction []UserTransactionExcel) (fileWriter *excelize.File) {
+	rowCount := index + 2
+	file.SetCellValue("Sheet1", fmt.Sprintf("A%v", rowCount), transaction[index].Id)
+	file.SetCellValue("Sheet1", fmt.Sprintf("B%v", rowCount), transaction[index].Amount)
+	file.SetCellValue("Sheet1", fmt.Sprintf("C%v", rowCount), transaction[index].Status)
+	file.SetCellValue("Sheet1", fmt.Sprintf("D%v", rowCount), transaction[index].TransactionId)
+	file.SetCellValue("Sheet1", fmt.Sprintf("E%v", rowCount), transaction[index].CampaignName)
+	file.SetCellValue("Sheet1", fmt.Sprintf("F%v", rowCount), transaction[index].CampaignImageUrl)
+	file.SetCellValue("Sheet1", fmt.Sprintf("G%v", rowCount), transaction[index].CreatedAt)
+
+	return file
 }
