@@ -39,7 +39,7 @@ RESTful API of <b>GO - Startup</b>
 | 9  | Upload Campaign images                     | api/v1/campaigns-images  | http://dolan.my.id/api/v1/campaigns-images  | POST
 | 10 | Get Transaction(using midtrans payment)    | api/v1/transaction       | http://dolan.my.id/api/v1/transaction       | GET
 | 11 | Create Transaction(using midtrans payment) | api/v1/transaction       | http://dolan.my.id/api/v1/transaction       | POST
-| 12 | Export Transaction to Excel                | api/v1/transaction/excel | http://dolan.my.id/api/v1/transaction/excel | POST
+| 12 | Export Transaction to Excel                | api/v1/transaction/excel | http://dolan.my.id/api/v1/transaction/excel | GET
 
 ---
 
