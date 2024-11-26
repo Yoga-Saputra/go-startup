@@ -22,31 +22,33 @@
 RESTful API of <b>GO - Startup</b>
 </p>
 
-
 # Startup API Guide
 
 ## 🔀 Compatible Route Endpoint
-| NO | Use                                        | Endpoint                 | Example                                     | Action
-|----|--------------------------------------------|--------------------------|---------------------------------------------|------------
-| 1  | Register                                   | api/v1/users             | http://dolan.my.id/api/v1/users             | POST
-| 2  | Login                                      | api/v1/session           | http://dolan.my.id/api/v1/session           | POST
-| 3  | Email Checker                              | api/v1/email_checkers    | http://dolan.my.id/api/v1/email_checkers    | POST
-| 4  | Upload Avatar                              | api/v1/avatars           | http://dolan.my.id/api/v1/avatars           | POST
-| 5  | Get Campaigns                              | api/v1/campaigns         | http://dolan.my.id/api/v1/campaigns         | GET
-| 6  | Create Campaign                            | api/v1/campaigns         | http://dolan.my.id/api/v1/campaigns         | POST
-| 7  | Update Campaign                            | api/v1/campaigns/{id}    | http://dolan.my.id/api/v1/campaigns/{id}    | PUT
-| 9  | Get Detail Campaign                        | api/v1/campaigns/{id}    | http://dolan.my.id/api/v1/campaigns/{id}    | GET
-| 9  | Upload Campaign images                     | api/v1/campaigns-images  | http://dolan.my.id/api/v1/campaigns-images  | POST
-| 10 | Get Transaction(using midtrans payment)    | api/v1/transaction       | http://dolan.my.id/api/v1/transaction       | GET
-| 11 | Create Transaction(using midtrans payment) | api/v1/transaction       | http://dolan.my.id/api/v1/transaction       | POST
-| 12 | Export Transaction to Excel                | api/v1/transaction/excel | http://dolan.my.id/api/v1/transaction/excel | GET
+
+| NO  | Use                                        | Endpoint                 | Example                                     | Action |
+| --- | ------------------------------------------ | ------------------------ | ------------------------------------------- | ------ |
+| 1   | Register test                              | api/v1/users             | http://dolan.my.id/api/v1/users             | POST   |
+| 2   | Login                                      | api/v1/session           | http://dolan.my.id/api/v1/session           | POST   |
+| 3   | Email Checker                              | api/v1/email_checkers    | http://dolan.my.id/api/v1/email_checkers    | POST   |
+| 4   | Upload Avatar                              | api/v1/avatars           | http://dolan.my.id/api/v1/avatars           | POST   |
+| 5   | Get Campaigns                              | api/v1/campaigns         | http://dolan.my.id/api/v1/campaigns         | GET    |
+| 6   | Create Campaign                            | api/v1/campaigns         | http://dolan.my.id/api/v1/campaigns         | POST   |
+| 7   | Update Campaign                            | api/v1/campaigns/{id}    | http://dolan.my.id/api/v1/campaigns/{id}    | PUT    |
+| 9   | Get Detail Campaign                        | api/v1/campaigns/{id}    | http://dolan.my.id/api/v1/campaigns/{id}    | GET    |
+| 9   | Upload Campaign images                     | api/v1/campaigns-images  | http://dolan.my.id/api/v1/campaigns-images  | POST   |
+| 10  | Get Transaction(using midtrans payment)    | api/v1/transaction       | http://dolan.my.id/api/v1/transaction       | GET    |
+| 11  | Create Transaction(using midtrans payment) | api/v1/transaction       | http://dolan.my.id/api/v1/transaction       | POST   |
+| 12  | Export Transaction to Excel                | api/v1/transaction/excel | http://dolan.my.id/api/v1/transaction/excel | GET    |
 
 ---
 
 ## 📖 Compatible JSON Payload Startup API
+
 This is the JSON payload that's sended to Startup API
 
 ### 💲 Register JSON Payload
+
 ```js
 {
     "name": "Developer",
@@ -57,6 +59,7 @@ This is the JSON payload that's sended to Startup API
 ```
 
 ### 💸 Login JSON Payload
+
 ```js
 {
     "email": "agolang4@gmail.com",
@@ -65,6 +68,7 @@ This is the JSON payload that's sended to Startup API
 ```
 
 ### 💸 Email Checker JSON Payload
+
 ```js
 {
     "email": "golang4@gmail.com"
@@ -72,6 +76,7 @@ This is the JSON payload that's sended to Startup API
 ```
 
 ### 💸 Upload Avatar Form Data Payload
+
 ```js
 
 form-data
@@ -82,6 +87,7 @@ form-data
 ```
 
 ### 💸 Get Campaigns Query Param Payload (optional)
+
 ```js
 
 Query-Params
@@ -92,6 +98,7 @@ Query-Params
 ```
 
 ### 💸 Create Campaign JSON Payload
+
 ```js
 {
     "name": "go campaign",
@@ -101,7 +108,9 @@ Query-Params
     "perks": "go ,dev,  programmer"
 }
 ```
+
 ### 💸 Update Campaign JSON Payload
+
 ```js
 {
     "name": "campaign update",
@@ -112,12 +121,14 @@ Query-Params
 }
 ```
 
-### 💸 Get Detail Campaign 
+### 💸 Get Detail Campaign
+
 ```js
-v1/campaigns/2
+v1 / campaigns / 2;
 ```
 
 ### 💸 Upload Campaign images Form Data Payload
+
 ```js
 
 form-data
@@ -130,6 +141,7 @@ form-data
 ```
 
 ### 💸 Create Transaction JSON Payload
+
 ```js
 {
     "campaign_id": 26,
